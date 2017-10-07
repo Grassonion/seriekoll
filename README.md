@@ -1,1 +1,3 @@
-#seriekoll, skriv in en serie få datum
+﻿Seriekoll
+---------------
+ska hålla koll på seriers datum

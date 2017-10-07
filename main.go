@@ -4,40 +4,80 @@ import (
 	"github.com/PuerkitoBio/goquery"
 
 	"log"
+	"os"
+
+	"bufio"
+
 )
 /*
 https://jonathanmh.com/web-scraping-golang-goquery/
 
 
-
-
+//Abandoned IMDB because their site changes all the time, going with next-episode.net
  */
 func main() {
-	fmt.Print("Yeahllo\n")
+	readFile("seriekoll.txt")
 
-	Scrape()
+	fmt.Print("https://next-episode.net/\n")
+	fmt.Print("Goto wanted series and paste in url\n")
+	url :=""
+	fmt.Fscanf(os.Stdin,"%s",&url)
+	writeFile("seriekoll.txt",url+"\n\r")
+
+
+	//Scrape(url)
 }
 
-func Scrape() {
-	doc, err := goquery.NewDocument("http://www.imdb.com/title/tt2467372/episodes?ref_=tt_ov_epl")
-	if err != nil {
-		log.Fatal(err)
-		fmt.Print("errrro")
+func Scrape(url string) {
+	if(url != ""){
+		doc, err := goquery.NewDocument(url)
+		if err != nil {
+			log.Fatal(err)
+			fmt.Print("errrro")
+		}
+
+
+		pgtitle := doc.Find("div#next_episode").Contents().Text() //gets too much information right now
+
+		fmt.Printf(pgtitle)
 	}
 
 
-	pgtitle := doc.Find("h3").Contents().Text()
-	fmt.Printf(pgtitle)
-
-
-/*
-	// Find the review items
-	doc.Find(".sidebar-reviews article .content-block").Each(func(i int, s *goquery.Selection) {
-		// For each item found, get the band and title
-		band := s.Find("a").Text()
-		title := s.Find("i").Text()
-		fmt.Printf("Review %d: %s - %s\n", i, band, title)
-	})
-*/
 }
 
+
+func readFile(filename string) {
+
+	file, err := os.Open(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan() {             // internally, it advances token based on sperator
+		//fmt.Println(scanner.Text())  // token in unicode-char
+		if(scanner.Text()!=""){
+			Scrape(scanner.Text())
+		}
+
+	}
+
+}
+
+func writeFile(filename string, msg string) {
+	fo, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		panic(err)
+	}
+	defer func() {
+		if err := fo.Close(); err != nil {
+			panic(err)
+		}
+	}()
+
+	w := bufio.NewWriter(fo)
+	fmt.Fprint(w, msg)
+	w.Flush()
+}
