@@ -9,12 +9,9 @@ import (
 	"bufio"
 
 )
-/*
-https://jonathanmh.com/web-scraping-golang-goquery/
+//http://www.omdbapi.com/ could be used but no info about next episode..
 
 
-//Abandoned IMDB because their site changes all the time, going with next-episode.net
- */
 func main() {
 	readFile("seriekoll.txt")
 
@@ -23,9 +20,6 @@ func main() {
 	url :=""
 	fmt.Fscanf(os.Stdin,"%s",&url)
 	writeFile("seriekoll.txt",url+"\n\r")
-
-
-	//Scrape(url)
 }
 
 func Scrape(url string) {
@@ -49,21 +43,20 @@ func Scrape(url string) {
 func readFile(filename string) {
 
 	file, err := os.Open(filename)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
+	if err == nil {
 
-	scanner := bufio.NewScanner(file)
+		defer file.Close()
 
-	for scanner.Scan() {             // internally, it advances token based on sperator
-		//fmt.Println(scanner.Text())  // token in unicode-char
-		if(scanner.Text()!=""){
-			Scrape(scanner.Text())
+		scanner := bufio.NewScanner(file)
+
+		for scanner.Scan() { // internally, it advances token based on sperator
+			//fmt.Println(scanner.Text())  // token in unicode-char
+			if (scanner.Text() != "") {
+				Scrape(scanner.Text())
+			}
+
 		}
-
 	}
-
 }
 
 func writeFile(filename string, msg string) {

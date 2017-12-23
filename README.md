@@ -1,3 +1,3 @@
 ﻿Seriekoll
 ---------------
-ska hålla koll på seriers datum
+Search for the series you want to keep an eye on. Copy and paste the url. Enjoy and use at own risk.
