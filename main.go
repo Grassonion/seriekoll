@@ -14,9 +14,10 @@ import (
 
 func main() {
 	readFile("seriekoll.txt")
-
-	fmt.Print("https://next-episode.net/\n")
-	fmt.Print("Goto wanted series and paste in url\n")
+	fmt.Println("--------------")
+	fmt.Println("https://next-episode.net/\n")
+	fmt.Println("Goto wanted series and paste in url\n")
+	fmt.Println("--------------")
 	url :=""
 	fmt.Fscanf(os.Stdin,"%s",&url)
 	writeFile("seriekoll.txt",url+"\n\r")
@@ -52,11 +53,13 @@ func readFile(filename string) {
 		for scanner.Scan() { // internally, it advances token based on sperator
 			//fmt.Println(scanner.Text())  // token in unicode-char
 			if (scanner.Text() != "") {
+				fmt.Println("Info from: " + scanner.Text())
 				Scrape(scanner.Text())
 			}
 
 		}
 	}
+	fmt.Println("")
 }
 
 func writeFile(filename string, msg string) {
